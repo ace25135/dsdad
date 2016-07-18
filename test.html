@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http:
+//www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Albums</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min
+.js"></script>
+</head>
+<body>
+  <div id="fb-root"></div>
+  <script src="//connect.facebook.net/en_US/all.js"></script>
+  <script>
+    window.fbAsyncInit = function() {
+	  FB.init({
+	    appId : 'XXXXXXXX', 
+	    channelURL : '//localhost/channel.html', 
+	    status : true,
+	    cookie : true,
+	    oauth : true, 
+	    xfbml : true
+      });
+    };
+
+    function getAlbums() {
+      //需先登入fb
+      FB.login(function(response) {
+      if (response.authResponse) {
+        //登入成功後，呼叫getGraph的方法，並傳個人在fb的userid
+        getGraph(response.authResponse.userID);
+      } else {
+        alert('登入失敗');
+      }
+      }, {
+        scope : 'user_photos'//相當重要，是應用程式需經個人同意，取得相簿
+的參數
+      });
+    }
+
+    function getGraph(userID) {
+      var body = 'GetAlbums';
+      //userID為個人在fb的userid
+      //photos.fields(picture,name,source)包含要取得相簿內的資訊
+      //name與cover_photo為相簿資訊
+      //limit=5是說可以取得前5本相簿，以時間排序，也可以不設，就是全部取得
+var url = '/'+userID+'/albums?fields=photos.fields(picture,name,
+source),name,cover_photo&limit=5';
+      FB.api(url, 'get', { message: body }, function(response) {
+        if (!response || response.error) {
+          alert('Error occured');
+        } else {
+      $(response.data).each(function(index,value){
+        var album = response.data[index];
+        var name = album.name;//相簿名稱
+        var coverId = album.cover_photo;//封面相片的id
+        var photos = album.photos;
+        //取得相簿部內的相片資訊
+        $(photos.data).each(function(index2,value2){
+          var photo = photos.data[index2];
+          var picture = photo.picture;//相片的url(小圖)
+          var name = photo.name;//相片的名稱
+          var source = photo.source;//相片的url(原圖)
+          //相片的id，可藉由判別該id與上述的coverId是否相同，來得知該相片是
+否為封面圖
+          var id = photo.id;
+        });
+      });
+        }
+      });
+    }
+
+  </script>
+<a href="javascript:;" onclick="getAlbums()">Albums</a>
+</body>
+</html>
