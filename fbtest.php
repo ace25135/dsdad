@@ -3,7 +3,7 @@
 ini_set('max_execution_time', 6000);
 ini_set('memory_limit', '64M');
 // include the Facebook PHP SDK - https://github.com/facebook/php-sdk/
-require 'facebook.php';
+require 'Facebook.php';
 // enter your App ID and App Secret
 // register an FB App at https://developers.facebook.com/apps/
 $app_id = '198193930582303';
