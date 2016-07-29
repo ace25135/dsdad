@@ -5,17 +5,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Albums</title>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min
-.js"></script>
+<script src="jquery.min.js"></script>
 </head>
 <body>
   <div id="fb-root"></div>
-  <script src="//connect.facebook.net/en_US/all.js"></script>
+  <script src="all.js"></script>
   <script>
     window.fbAsyncInit = function() {
 	  FB.init({
-	    appId : 'XXXXXXXX', 
-	    channelURL : '//localhost/channel.html', 
+	    appId : '198193930582303',
+		channelURL : 'goodgoodeateateat.herokuapp.com/channel.html',
 	    status : true,
 	    cookie : true,
 	    oauth : true, 
@@ -33,8 +32,7 @@
         alert('登入失敗');
       }
       }, {
-        scope : 'user_photos'//相當重要，是應用程式需經個人同意，取得相簿
-的參數
+        scope : 'user_photos'
       });
     }
 
@@ -44,8 +42,7 @@
       //photos.fields(picture,name,source)包含要取得相簿內的資訊
       //name與cover_photo為相簿資訊
       //limit=5是說可以取得前5本相簿，以時間排序，也可以不設，就是全部取得
-var url = '/'+userID+'/albums?fields=photos.fields(picture,name,
-source),name,cover_photo&limit=5';
+var url = '/'+userID+'/albums?fields=photos.fields(picture,name,source),name,cover_photo&limit=5';
       FB.api(url, 'get', { message: body }, function(response) {
         if (!response || response.error) {
           alert('Error occured');
@@ -60,10 +57,9 @@ source),name,cover_photo&limit=5';
           var photo = photos.data[index2];
           var picture = photo.picture;//相片的url(小圖)
           var name = photo.name;//相片的名稱
-          var source = photo.source;//相片的url(原圖)
-          //相片的id，可藉由判別該id與上述的coverId是否相同，來得知該相片是
-否為封面圖
+          var source = photo.source;
           var id = photo.id;
+		  console.log(name);
         });
       });
         }
